@@ -10,8 +10,6 @@ interface Request {
 }
 
 interface UserReturn {
-  name: string;
-  email: string;
   password?: string;
 }
 
