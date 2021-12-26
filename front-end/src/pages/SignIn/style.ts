@@ -29,43 +29,6 @@ export const Content = styled.div`
       margin-bottom: 24px;
     }
 
-    input {
-      background: #232129;
-      border-radius: 10px;
-      border: 2px solid #232129;
-      padding: 16px;
-      width: 100%;
-      color: #F4EDE8;
-      transition: background-color 0.4s;
-      transition: border 0.4s;
-
-      & + input {
-        margin-top: 8px;
-      }
-
-      &:focus {
-        background: ${tint(0.1, '#232129')};
-        border: 2px solid ${tint(0.1, '#232129')};
-      }
-    }
-
-    button{
-      background: #FF9000;
-      border-radius: 10px;
-      height: 56px;
-      border: 0;
-      padding: 16px;
-      width: 100%;
-      font-weight: 500;
-      color: #312e38;
-      margin-top: 16px;
-      transition: background-color 0.2s;
-
-      &:hover{
-        background: ${shade(0.2, '#FF9000')};
-      }
-    }
-
     a{
       color: #F4EDE8;
       display: block;
