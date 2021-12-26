@@ -5,7 +5,7 @@ import logoImg from '../../assets/logo.svg'
 
 import { Container, Content, Background } from "./style";
 
-const SingIn: React.FC = () => {
+const SignIn: React.FC = () => {
   return (
     <Container>
       <Content>
@@ -34,4 +34,4 @@ const SingIn: React.FC = () => {
   )
 };
 
-export { SingIn };
+export { SignIn };
