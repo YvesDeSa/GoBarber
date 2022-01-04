@@ -2,20 +2,33 @@ import React, { useCallback, useRef } from "react";
 import { FiArrowLeft, FiMail, FiUser, FiLock } from 'react-icons/fi'
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import logoImg from '../../assets/logo.svg'
 
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
+
 import { Container, Content, AnimationContainer, Background } from "./style";
+
+import api from "../../services/api";
+import { useToast } from "../../hooks/toast";
+
 import getValidationErros from "../../utils/getValidationErrors";
 import * as Yup from 'yup';
 
+interface ISignUpFormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const { addToast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = useCallback(async (data: object) => {
+  const handleSubmit = useCallback(async (data: ISignUpFormData) => {
     try {
       formRef.current?.setErrors({});
 
@@ -29,12 +42,32 @@ const SignUp: React.FC = () => {
         abortEarly: false,
       });
 
-    } catch (error) {
-      console.log(error);
+      await api.post('users', data);
 
-      formRef.current?.setErrors(getValidationErros(error as Yup.ValidationError));
+      navigate('/');
+
+      addToast({
+        type: 'success',
+        title: 'Cadastro realizado',
+        description: 'Você já pode fazer seu login'
+      });
+
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        console.log(error);
+
+        formRef.current?.setErrors(getValidationErros(error as Yup.ValidationError));
+
+        return;
+      }
+
+      addToast({
+        type: 'error',
+        title: 'Erro na altenticação',
+        description: 'Occoreu um erro ao fazer cadastro'
+      });
     }
-  }, []);
+  }, [addToast, navigate]);
 
   return (
     <Container>

@@ -16,7 +16,7 @@ export const Routers: React.FC = () => {
         </PrivateRoute>} />
 
       <Route path="/signup" element={
-        <PrivateRoute redirectTo="dashboard">
+        <PrivateRoute redirectTo="/">
           <SignUp />
         </PrivateRoute>} />
 
