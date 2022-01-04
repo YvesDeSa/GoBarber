@@ -2,10 +2,10 @@ import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
-import AppError from '../errors/AppError';
+import AppError from '@shared/errors/AppError';
 
-import uploadConfig from '../config/upload';
-import User from '../models/User';
+import uploadConfig from '@config/upload';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 interface Request {
   user_id: string;
@@ -17,16 +17,16 @@ interface UserReturn {
 }
 
 class UpdateUserAvatarService {
-  public async execute({ user_id, avatarFileName }: Request): Promise<UserReturn>{
+  public async execute({ user_id, avatarFileName }: Request): Promise<UserReturn> {
     const usersRepository = getRepository(User);
 
     const user = await usersRepository.findOne(user_id);
 
-    if(!user){
+    if (!user) {
       throw new AppError('Only authenticated users can change avatar.');
     }
 
-    if(user.avatar){
+    if (user.avatar) {
       const userAvatarFilePath = path.join(uploadConfig.derectory, user.avatar);
 
       await fs.promises.stat(userAvatarFilePath) && fs.promises.unlink(userAvatarFilePath);
