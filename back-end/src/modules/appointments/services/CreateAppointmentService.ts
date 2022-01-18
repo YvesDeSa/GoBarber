@@ -1,7 +1,6 @@
+import "reflect-metadata";
 import { startOfHour } from 'date-fns';
-import { container, inject, injectable } from 'tsyringe';
-
-import AppError from '@shared/errors/AppError';
+import { inject, injectable } from 'tsyringe';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '../infra/repositories/IAppintmentsRepository';
@@ -25,7 +24,7 @@ class CreateAppointmentService {
     );
 
     if (findAppointmentInSameDate) {
-      throw new AppError('This aappointment is alredy booked');
+      throw new Error('This aappointment is alredy booked');
     }
 
     const appointment = this.appointmentsRepository.create({
