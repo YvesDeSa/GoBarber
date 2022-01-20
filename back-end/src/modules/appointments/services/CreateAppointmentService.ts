@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '../infra/repositories/IAppintmentsRepository';
+import AppError from "@shared/errors/AppError";
 
 interface IRequest {
   provider_id: string;
@@ -24,7 +25,7 @@ class CreateAppointmentService {
     );
 
     if (findAppointmentInSameDate) {
-      throw new Error('This aappointment is alredy booked');
+      throw new AppError('This aappointment is alredy booked');
     }
 
     const appointment = this.appointmentsRepository.create({
