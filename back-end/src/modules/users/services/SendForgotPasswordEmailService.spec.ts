@@ -39,6 +39,7 @@ describe('SendForgotPasswordEmailService', () => {
     });
 
     expect(sendMail).toHaveBeenCalled();
+
   });
 
   it('should not be able to recover a non-existing user password', async () => {
@@ -66,6 +67,7 @@ describe('SendForgotPasswordEmailService', () => {
     });
 
     expect(generateToken).toHaveBeenCalledWith(user.id);
+
   });
 
 });
