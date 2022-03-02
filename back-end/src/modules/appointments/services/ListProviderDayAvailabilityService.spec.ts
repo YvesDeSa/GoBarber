@@ -15,11 +15,13 @@ describe("listProviderDayAvailability", () => {
   it("should be able to list the day availability from provider", async () => {
     await fakeAppoitmentsRepository.create({
       provider_id: 'user',
+      user_id: 'user',
       date: new Date(2022, 2, 2, 11, 0, 0)
     });
 
     await fakeAppoitmentsRepository.create({
       provider_id: 'user',
+      user_id: 'user',
       date: new Date(2022, 2, 2, 13, 0, 0)
     });
 
