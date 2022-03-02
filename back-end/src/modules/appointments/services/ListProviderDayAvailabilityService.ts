@@ -6,7 +6,7 @@ import { getHours, isAfter } from "date-fns";
 interface IRequest {
   provider_id: string;
   month: number,
-  yaer: number,
+  year: number,
   day: number,
 };
 
@@ -22,12 +22,12 @@ class ListProviderDayAvailabilityService {
     private appintmentsRepository: IAppointmentsRepository
   ) { }
 
-  public async execute({ provider_id, month, yaer, day }: IRequest): Promise<IResponse> {
+  public async execute({ provider_id, month, year, day }: IRequest): Promise<IResponse> {
     const appointments = await this.appintmentsRepository.findAllInDayFromProvider({
       provider_id,
       day,
       month,
-      yaer
+      year
     });
 
     const hourStart = 8;
@@ -44,7 +44,7 @@ class ListProviderDayAvailabilityService {
         appointment => getHours(appointment.date) === hour
       );
 
-      const compareDate = new Date(yaer, month - 1, day, hour);
+      const compareDate = new Date(year, month - 1, day, hour);
 
       return {
         hour,

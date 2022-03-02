@@ -21,13 +21,13 @@ class FakeAppointmentsRepository implements IAppointmentsRepository {
   public async findAllInMonthFromProvider({
     provider_id,
     month,
-    yaer
+    year
   }: IFindAllInMonthFromProviderDTO): Promise<Appointment[]> {
     return this.appointments.filter(appointment => {
       return (
         appointment.provider_id === provider_id &&
         getMonth(appointment.date) + 1 === month &&
-        getYear(appointment.date) === yaer
+        getYear(appointment.date) === year
       );
     });
   };
@@ -36,14 +36,14 @@ class FakeAppointmentsRepository implements IAppointmentsRepository {
     provider_id,
     day,
     month,
-    yaer
+    year
   }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
     return this.appointments.filter(appointment => {
       return (
         appointment.provider_id === provider_id &&
         getDate(appointment.date) === day &&
         getMonth(appointment.date) + 1 === month &&
-        getYear(appointment.date) === yaer
+        getYear(appointment.date) === year
       );
     });
   };

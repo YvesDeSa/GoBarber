@@ -7,7 +7,7 @@ import { getDate, getDaysInMonth, getMonth, getYear } from "date-fns";
 interface IRequest {
   provider_id: string;
   month: number,
-  yaer: number,
+  year: number,
 };
 
 type IResponse = Array<{
@@ -22,14 +22,14 @@ class ListProviderMonthAvailabilityService {
     private appintmentsRepository: IAppointmentsRepository
   ) { }
 
-  public async execute({ provider_id, month, yaer }: IRequest): Promise<IResponse> {
+  public async execute({ provider_id, month, year }: IRequest): Promise<IResponse> {
     const appointments = await this.appintmentsRepository.findAllInMonthFromProvider({
       provider_id,
       month,
-      yaer
+      year
     });
 
-    const numberOfDaysInMonth = getDaysInMonth(new Date(yaer, month - 1));
+    const numberOfDaysInMonth = getDaysInMonth(new Date(year, month - 1));
 
     const eachDayArray = Array.from(
       { length: numberOfDaysInMonth },
@@ -44,8 +44,7 @@ class ListProviderMonthAvailabilityService {
       return {
         day,
         available:
-          appointmentsInDay.length < 10
-          && getDate(Date.now()) <= day,
+          appointmentsInDay.length < 10,
       }
 
     });
