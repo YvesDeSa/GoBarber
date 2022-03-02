@@ -2,7 +2,7 @@ import { injectable, inject } from "tsyringe";
 
 import IAppointmentsRepository from "../infra/repositories/IAppintmentsRepository";
 import User from "@modules/users/infra/typeorm/entities/User";
-import { getDate, getDaysInMonth } from "date-fns";
+import { getDate, getDaysInMonth, getMonth, getYear } from "date-fns";
 
 interface IRequest {
   provider_id: string;
@@ -18,7 +18,7 @@ type IResponse = Array<{
 @injectable()
 class ListProviderMonthAvailabilityService {
   constructor(
-    @inject('AppointmentRepository')
+    @inject('AppointmentsRepository')
     private appintmentsRepository: IAppointmentsRepository
   ) { }
 
@@ -43,7 +43,9 @@ class ListProviderMonthAvailabilityService {
 
       return {
         day,
-        available: appointmentsInDay.length < 10,
+        available:
+          appointmentsInDay.length < 10
+          && getDate(Date.now()) <= day,
       }
 
     });
