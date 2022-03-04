@@ -14,6 +14,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.12",
     "bcryptjs": "^2.4.3",
+    "celebrate": "^15.0.1",
     "cors": "^2.8.5",
     "date-fns": "^2.25.0",
     "eslint-import-resolver-typescript": "^2.5.0",
