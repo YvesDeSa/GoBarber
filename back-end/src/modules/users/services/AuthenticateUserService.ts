@@ -5,18 +5,15 @@ import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../infra/repositories/IUsersRepository';
 import IHashProviders from '../providers/HashProviders/models/IHashProviders';
 import { inject, injectable } from 'tsyringe';
+import User from '../infra/typeorm/entities/User';
 
 interface Request {
   email: string,
   password: string,
 }
 
-interface UserResponse {
-  password?: string;
-}
-
 interface Response {
-  user: UserResponse;
+  user: User;
   token: string;
 }
 

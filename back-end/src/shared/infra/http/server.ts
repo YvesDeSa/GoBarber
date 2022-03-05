@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import 'es6-shim';
 import 'dotenv/config';
 
 import express, { Request, Response, NextFunction } from 'express';

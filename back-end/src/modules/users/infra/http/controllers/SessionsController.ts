@@ -1,4 +1,5 @@
 import AuthenticateUserService from "@modules/users/services/AuthenticateUserService";
+import { instanceToInstance } from "class-transformer";
 
 import { Request, Response } from "express";
 import { container } from "tsyringe";
@@ -15,8 +16,6 @@ export default class SessionsController {
       password,
     });
 
-    delete user.password;
-
-    return response.json({ user, token });
+    return response.json({ user: instanceToInstance(user), token });
   }
 }
