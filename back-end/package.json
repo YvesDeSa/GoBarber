@@ -11,6 +11,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@mailchimp/mailchimp_marketing": "^3.0.74",
+    "@mailchimp/mailchimp_transactional": "^1.0.47",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.12",
     "bcryptjs": "^2.4.3",
@@ -24,6 +26,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "handlebars": "^4.7.7",
+    "ioredis": "^4.28.5",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.0",
     "multer": "^1.4.3",
@@ -39,8 +42,10 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/ioredis": "^4.28.9",
     "@types/jest": "^27.4.0",
     "@types/jsonwebtoken": "^8.5.5",
+    "@types/mailchimp__mailchimp_marketing": "^3.0.4",
     "@types/multer": "^1.4.7",
     "@types/nodemailer": "^6.4.4",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
