@@ -1,7 +1,7 @@
-import ICacheProvider from "@shared/container/providers/CacheProvider/models/ICacheProvider";
 import { injectable, inject } from "tsyringe";
 
 import IAppointmentsRepository from "../infra/repositories/IAppintmentsRepository";
+import ICacheProvider from "@shared/container/providers/CacheProvider/models/ICacheProvider";
 import Appointment from "../infra/typeorm/entities/Appointment";
 
 interface IRequest {
