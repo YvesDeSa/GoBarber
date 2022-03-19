@@ -1,5 +1,5 @@
 interface IMailConfig {
-  driver: 'ethereal' | 'mailchimp';
+  driver: 'ethereal';
 }
 
 export default {

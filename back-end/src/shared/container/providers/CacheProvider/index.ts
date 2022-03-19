@@ -1,9 +1,9 @@
-// import { container } from "tsyringe";
+import { container } from "tsyringe";
 
-// import ICacheProvider from "./models/ICacheProvider";
-// import RedisCacheProvider from "./implementations/RedisCacheProvider";
+import ICacheProvider from "./models/ICacheProvider";
+import RedisCacheProvider from "./implementations/RedisCacheProvider";
 
-// container.registerSingleton<ICacheProvider>(
-//   "CacheProvider",
-//   RedisCacheProvider,
-// );
+container.registerSingleton<ICacheProvider>(
+  "CacheProvider",
+  RedisCacheProvider,
+);
