@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Container, Header, HeaderContainer, Profile, Content, Schedule, Calendar, NextAppointment } from "./style";
+import { Container, Header, HeaderContainer, Profile, Content, Schedule, Calendar, NextAppointment, Section, Appointment } from "./style";
 
 import logoImg from '../../assets/logo.svg';
 import { FiClock, FiPower } from "react-icons/fi";
 import useAuth from "../../hooks/auth";
 
 export const Dashboard: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const { signOut, user } = useAuth()
 
   return (
@@ -51,6 +52,51 @@ export const Dashboard: React.FC = () => {
               </span>
             </div>
           </NextAppointment>
+
+          <Section>
+            <strong>Manhã</strong>
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
+
+                <strong>{user.name}</strong>
+              </div>
+            </Appointment>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
+
+                <strong>{user.name}</strong>
+              </div>
+            </Appointment>
+          </Section>
+
+          <Section>
+            <strong>Tarde</strong>
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
+
+                <strong>{user.name}</strong>
+              </div>
+            </Appointment>
+          </Section>
 
         </Schedule>
 
