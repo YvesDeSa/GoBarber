@@ -44,13 +44,13 @@ const SignUp: React.FC = () => {
 
       await api.post('users', data);
 
-      navigate('/');
-
       addToast({
         type: 'success',
         title: 'Cadastro realizado',
         description: 'Você já pode fazer seu login'
       });
+
+      navigate('/');
 
     } catch (error) {
       if (error instanceof Yup.ValidationError) {

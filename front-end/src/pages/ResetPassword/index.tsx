@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import { FiLogIn, FiLock } from 'react-icons/fi'
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import logoImg from '../../assets/logo.svg'
 
@@ -15,6 +15,7 @@ import { FormHandles } from "@unform/core";
 import * as Yup from 'yup';
 import { Form } from "@unform/web";
 import { useToast } from "../../hooks/toast";
+import api from "../../services/api";
 
 interface IResetPasswordDataForm {
   password: string;
@@ -25,6 +26,8 @@ const ResetPassword: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const { addToast } = useToast();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleSubmit = useCallback(async (data: IResetPasswordDataForm) => {
     try {
@@ -38,6 +41,28 @@ const ResetPassword: React.FC = () => {
       await schema.validate(data, {
         abortEarly: false,
       });
+
+      const { password, password_confirmation } = data;
+
+      const token = location.search.replace('?token=', '');
+
+      if (!token) {
+        throw new Error()
+      }
+
+      await api.post('/password/reset', {
+        password,
+        password_confirmation,
+        token
+      });
+
+      addToast({
+        type: 'success',
+        title: 'Senha resetada com sucesso',
+        description: 'Você já pode fazer seu login'
+      });
+
+      navigate('/');
 
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
@@ -54,7 +79,7 @@ const ResetPassword: React.FC = () => {
         description: 'Occoreu um erro ao resetar sua senha, tente novamente'
       });
     }
-  }, [addToast]);
+  }, [addToast, navigate, location.search]);
 
   return (
     <Container>
