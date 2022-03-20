@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Container, Header, HeaderContainer, Profile } from "./style";
+import { Container, Header, HeaderContainer, Profile, Content, Schedule, Calendar, NextAppointment } from "./style";
 
 import logoImg from '../../assets/logo.svg';
-import { FiPower } from "react-icons/fi";
+import { FiClock, FiPower } from "react-icons/fi";
 import useAuth from "../../hooks/auth";
 
 export const Dashboard: React.FC = () => {
@@ -16,7 +16,7 @@ export const Dashboard: React.FC = () => {
           <img src={logoImg} alt="GoBarber" />
 
           <Profile>
-            <img src={user.avatar_url} alt={user.name} />
+            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt={user.name} />
             <div>
               <span>Bem vindo</span>
               <strong>{user.name}</strong>
@@ -29,7 +29,33 @@ export const Dashboard: React.FC = () => {
         </HeaderContainer>
       </Header>
 
+      <Content>
+        <Schedule>
+          <h1>Horarios agendados</h1>
+          <p>
+            <span>Hoje</span>
+            <span>Dia 06</span>
+            <span>Segunda-feira</span>
+          </p>
 
+          <NextAppointment>
+            <strong>Atendimento a seguir</strong>
+
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
+
+              <strong>{user.name}</strong>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+            </div>
+          </NextAppointment>
+
+        </Schedule>
+
+        <Calendar />
+      </Content>
     </Container>
   );
 }
