@@ -6,13 +6,19 @@ interface ISignInCredentials {
   password: string;
 };
 
+interface IUser {
+  name: string;
+  id: string;
+  avatar_url: string;
+}
+
 interface IAuthState {
   token: string;
-  user: object;
+  user: IUser;
 };
 
 interface IAuthContent {
-  user: object;
+  user: IUser;
   signIn(credentials: ISignInCredentials): Promise<void>;
   signOut(): void;
 };
