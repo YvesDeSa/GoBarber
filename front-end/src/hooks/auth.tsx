@@ -30,8 +30,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     const token = localStorage.getItem('@GoBarber:token');
     const user = localStorage.getItem('@GoBarber:user');
 
-    if (token && user)
+    if (token && user) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
       return { token, user: JSON.parse(user) };
+    }
 
     return {} as IAuthState;
   });
@@ -46,6 +49,10 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     localStorage.setItem('@GoBarber:token', token);
     localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    console.log(api.defaults.headers.common['authorization'])
 
     setData({ token, user });
   }, []);
