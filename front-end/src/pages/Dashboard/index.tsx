@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import DayPicker, { DayModifiers } from "react-day-picker";
-import { isToday, format } from 'date-fns';
+import { isToday, format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import 'react-day-picker/lib/style.css';
@@ -20,6 +20,7 @@ interface IMonthAvailability {
 interface IAppointments {
   id: string;
   date: string;
+  hourFormatted: string;
   user: {
     name: string;
     avatar_url: string;
@@ -56,15 +57,21 @@ export const Dashboard: React.FC = () => {
   }, [currentMonth, user.id]);
 
   useEffect(() => {
-    api.get('/appointments/me', {
+    api.get<IAppointments[]>('/appointments/me', {
       params: {
         year: selectedDate.getFullYear(),
         month: selectedDate.getMonth() + 1,
         day: selectedDate.getDate()
       }
     }).then(response => {
-      setAppointments(response.data);
-      console.log(response.data)
+      const appointmentsFormatted = response.data.map(appointment => {
+        return {
+          ...appointment,
+          hourFormatted: format(parseISO(appointment.date), 'HH:mm')
+        }
+      })
+
+      setAppointments(appointmentsFormatted);
     })
   }, [selectedDate]);
 
@@ -90,6 +97,18 @@ export const Dashboard: React.FC = () => {
       locale: ptBR,
     })
   }, [selectedDate])
+
+  const morningAppointments = useMemo(() => {
+    return appointments.filter(appointment => {
+      return parseISO(appointment.date).getHours() < 12;
+    })
+  }, [appointments]);
+
+  const afternoonAppointments = useMemo(() => {
+    return appointments.filter(appointment => {
+      return parseISO(appointment.date).getHours() >= 12;
+    })
+  }, [appointments])
 
   return (
     <Container>
@@ -136,47 +155,44 @@ export const Dashboard: React.FC = () => {
 
           <Section>
             <strong>Manhã</strong>
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
 
-              <div>
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
 
-                <strong>{user.name}</strong>
-              </div>
-            </Appointment>
+            {morningAppointments.map(appointment => (
+              <Appointment key={appointment.id}>
+                <span>
+                  <FiClock />
+                  {appointment.hourFormatted}
+                </span>
 
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
+                <div>
+                  <img src={appointment.user.avatar_url} alt="" />
 
-              <div>
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
+                  <strong>{appointment.user.name}</strong>
+                </div>
+              </Appointment>
+            ))}
 
-                <strong>{user.name}</strong>
-              </div>
-            </Appointment>
+
           </Section>
 
           <Section>
             <strong>Tarde</strong>
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
 
-              <div>
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
+            {afternoonAppointments.map(appointment => (
+              <Appointment key={appointment.id}>
+                <span>
+                  <FiClock />
+                  {appointment.hourFormatted}
+                  {console.log(appointment.user.avatar_url)}
+                </span>
 
-                <strong>{user.name}</strong>
-              </div>
-            </Appointment>
+                <div>
+                  <img src={appointment.user.avatar_url} alt="" />
+
+                  <strong>{appointment.user.name}</strong>
+                </div>
+              </Appointment>
+            ))}
           </Section>
 
         </Schedule>
