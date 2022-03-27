@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useRef } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { FiMail, FiUser, FiLock, FiCamera, FiArrowLeft } from 'react-icons/fi'
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
@@ -19,7 +19,9 @@ import useAuth from "../../hooks/auth";
 interface IProfileFormData {
   name: string;
   email: string;
-  password: string;
+  old_password?: string;
+  password?: string;
+  password_confirmation?: string;
 }
 
 const Profile: React.FC = () => {
@@ -29,6 +31,13 @@ const Profile: React.FC = () => {
 
   const { user, updateUser } = useAuth();
 
+  useEffect(() => {
+    formRef.current?.setData({
+      name: user.name,
+      email: user.email
+    });
+  }, [user.email, user.name]);
+
   const handleSubmit = useCallback(async (data: IProfileFormData) => {
     try {
       formRef.current?.setErrors({});
@@ -36,19 +45,50 @@ const Profile: React.FC = () => {
       const schema = Yup.object().shape({
         name: Yup.string().required('Nome é obrigatório'),
         email: Yup.string().required('E-mail é obrigatório').email('Digite um e-mail válido'),
-        password: Yup.string().min(3, 'No mínimo 3 dígitos')
+
+        old_password: Yup.string(),
+        password: Yup.string().when('old_password', {
+          is: (val: string | any[]) => !!val.length,
+          then: Yup.string().required('Campo obrigatório'),
+          otherwise: Yup.string()
+        }),
+        password_confirmation: Yup.string().when('old_password', {
+          is: (val: string | any[]) => !!val.length,
+          then: Yup.string().required('Campo obrigatório'),
+          otherwise: Yup.string()
+        }).oneOf([Yup.ref('password'), null], 'Confirmação incorreta')
       });
 
       await schema.validate(data, {
         abortEarly: false,
       });
 
-      await api.post('users', data);
+      const {
+        name,
+        email,
+        old_password,
+        password,
+        password_confirmation
+      } = data;
+
+      const formData = Object.assign({
+        name,
+        email
+      }, old_password ? {
+        old_password,
+        password,
+        password_confirmation
+      } : {});
+
+      const response = await api.put("/profile", formData);
+
+      updateUser(response.data);
 
       addToast({
-        type: 'success',
-        title: 'Cadastro realizado',
-        description: 'Você já pode fazer seu login'
+        type: "success",
+        title: "Perfil atualizado",
+        description:
+          "Suas informações do perfil foram atualizados com sucesso",
       });
 
       navigate('/');
@@ -64,8 +104,8 @@ const Profile: React.FC = () => {
 
       addToast({
         type: 'error',
-        title: 'Erro na altenticação',
-        description: 'Occoreu um erro ao fazer cadastro'
+        title: 'Erro na atualização',
+        description: 'Occoreu um erro ao atualizar perfil, tente novamente'
       });
     }
   }, [addToast, navigate]);
@@ -86,7 +126,7 @@ const Profile: React.FC = () => {
         })
       });
     }
-  }, [addToast]);
+  }, [addToast, updateUser]);
 
   return (
     <Container>
@@ -99,10 +139,8 @@ const Profile: React.FC = () => {
       </header>
 
       <Content>
-        <Form ref={formRef} initialData={{
-          name: user.name,
-          email: user.email,
-        }} onSubmit={handleSubmit}>
+        <Form ref={formRef}
+          onSubmit={handleSubmit}>
 
           <AvatarInput>
             <img src={user.avatar_url} alt={user.name} />
