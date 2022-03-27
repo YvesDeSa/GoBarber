@@ -22,6 +22,7 @@ interface IAuthContent {
   user: IUser;
   signIn(credentials: ISignInCredentials): Promise<void>;
   signOut(): void;
+  updateUser(user: IUser): void;
 };
 
 const AuthContent = createContext<IAuthContent>({} as IAuthContent);
@@ -58,6 +59,15 @@ export const AuthProvider: React.FC = ({ children }) => {
     setData({ token, user });
   }, []);
 
+  const updateUser = useCallback(async (user: IUser) => {
+    localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+
+    setData({
+      token: data.token,
+      user
+    })
+  }, [setData, data.token]);
+
   const signOut = useCallback(() => {
     localStorage.removeItem('@GoBarber:token');
     localStorage.removeItem('@GoBarber:user');
@@ -66,7 +76,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <AuthContent.Provider value={{ user: data.user, signIn, signOut }}>
+    <AuthContent.Provider value={{ user: data.user, signIn, signOut, updateUser }}>
       {children}
     </AuthContent.Provider>
   );
